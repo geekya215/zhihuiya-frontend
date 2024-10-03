@@ -20,7 +20,6 @@ const LoginPage = () => {
         if (token !== null && apikey !== null) {
             navigate("/search")
         }
-        console.log(1)
     }, []);
 
     const handleLogin = async () => {
