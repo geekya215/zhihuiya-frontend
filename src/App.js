@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import { ChakraProvider } from '@chakra-ui/react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import LoginPage from './LoginPage';
+import SearchPage from './SearchPage';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ChakraProvider>
+      <Router>
+        <Routes>
+          {/* 登录页路由 */}
+          <Route path="/login" element={<LoginPage />} />
+
+          {/* 搜索页路由 */}
+          <Route path="/search" element={<SearchPage />} />
+
+          {/* 默认跳转到登录页 */}
+          <Route path="*" element={<LoginPage />} />
+        </Routes>
+      </Router>
+    </ChakraProvider>
   );
 }
 
