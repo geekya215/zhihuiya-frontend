@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Input, Stack, Text, FormControl, FormErrorMessage, Spinner, useToast } from '@chakra-ui/react';
 import axios from 'axios';
+import apiClient from './request';
 
 const LoginPage = () => {
     const [clientId, setClientId] = useState('');
@@ -40,7 +41,7 @@ const LoginPage = () => {
 
         // 继续处理登录...
         try {
-            const response = await axios.post('http://127.0.0.1:8080/api/v1/token', {
+            const response = await apiClient.post('/token', {
                 client_id: clientId,
                 client_secret: clientSecret
             });
@@ -74,7 +75,7 @@ const LoginPage = () => {
         } catch (error) {
             toast({
                 title: '登录失败',
-                description: error,
+                description: error.message,
                 status: 'error',
                 duration: 3000,
                 isClosable: true,

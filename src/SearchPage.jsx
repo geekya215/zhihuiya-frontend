@@ -6,7 +6,7 @@ import {
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import apiClient from './request';
 
 const SearchPage = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -25,6 +25,7 @@ const SearchPage = () => {
         const apikey = localStorage.getItem("apikey");
         if (token === null || apikey === null) {
             navigate("/login");
+            return;
         }
         triggerSearch();
     }, [currentPage, itemsPerPage]);
@@ -113,7 +114,7 @@ const SearchPage = () => {
     const triggerSearch = async () => {
         try {
             setIsLoading(true);
-            const patentsResponse = await axios.post('http://127.0.0.1:8080/api/v1/search/patents', {
+            const patentsResponse = await apiClient.post('/search/patents', {
                 query_text: searchTerm,  // 请求体参数
                 limit: itemsPerPage,
                 offset: (currentPage - 1) * itemsPerPage
@@ -137,7 +138,7 @@ const SearchPage = () => {
                 const patents = patentsData.results;
                 const patentIds = patents.map(p => p.patent_id).join(',')
 
-                const bibliographyRepsonse = await axios.post('http://127.0.0.1:8080/api/v1/search/bibliography', {}, {
+                const bibliographyRepsonse = await apiClient.post('/search/bibliography', {}, {
                     params: {  // 查询参数
                         apikey: localStorage.getItem("apikey"),
                         patent_id: patentIds
@@ -187,7 +188,7 @@ const SearchPage = () => {
         } catch (error) {
             toast({
                 title: '查询失败',
-                description: error,
+                description: error.message,
                 status: 'error',
                 duration: 3000,
                 isClosable: true,
